@@ -232,3 +232,10 @@ Ping / Pongs: 3
 kekalainen@Z97:~$ kubectl apply -f ./project-app/manifests/deployment.yaml 
 deployment.apps/web-server-deployment configured
 ```
+
+# 1.13
+
+```sh
+kekalainen@Z97:~$ kubectl apply -f ./project-app/manifests/deployment.yaml 
+deployment.apps/web-server-deployment configured
+```

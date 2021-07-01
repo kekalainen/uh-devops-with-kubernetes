@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: web-server
-          image: kekalainen/uh-devops-with-kubernetes:1.12
+          image: kekalainen/uh-devops-with-kubernetes:1.13
           volumeMounts:
           - name: data-volume
             mountPath: /usr/src/app/data
