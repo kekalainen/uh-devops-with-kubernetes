@@ -2,6 +2,8 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: web-server-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
   - http:
@@ -11,5 +13,12 @@ spec:
         backend:
           service:
             name: web-server-service
+            port:
+              name: http
+      - path: /pingpong
+        pathType: Prefix
+        backend:
+          service:
+            name: ping-pong-service
             port:
               name: http

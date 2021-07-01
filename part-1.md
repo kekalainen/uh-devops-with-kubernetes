@@ -162,3 +162,21 @@ ingress.networking.k8s.io/web-server-ingress created
 kekalainen@Z97:~$ curl localhost:8081
 {"hostname":"web-server-deployment-5d75885bc6-f7nb6"}
 ```
+
+# 1.09
+
+```sh
+kekalainen@Z97:~$ kubectl apply -f ./ping-pong-app/manifests/deployment.yaml 
+deployment.apps/ping-pong-deployment created
+kekalainen@Z97:~$ kubectl apply -f ./ping-pong-app/manifests/service.yaml 
+service/ping-pong-service created
+kekalainen@Z97:~$ kubectl apply -f ./project-app/manifests/ingress.yaml 
+ingress.networking.k8s.io/web-server-ingress configured
+```
+
+```sh
+kekalainen@Z97:~$ curl localhost:8081
+{"hostname":"web-server-deployment-5d75885bc6-f7nb6"}
+kekalainen@Z97:~$ curl localhost:8081/pingpong
+pong 0
+```
