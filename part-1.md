@@ -225,3 +225,10 @@ kekalainen@Z97:~$ curl localhost:8081/main
 2021-07-01T05:53:06.549Z: vkvxpnrccq
 Ping / Pongs: 3
 ```
+
+# 1.12
+
+```sh
+kekalainen@Z97:~$ kubectl apply -f ./project-app/manifests/deployment.yaml 
+deployment.apps/web-server-deployment configured
+```

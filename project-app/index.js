@@ -1,12 +1,9 @@
+require('./image-of-the-day.js');
+
 const express = require('express');
 const app = express();
-const os = require('os');
 
-app.get('/', (req, res) => {
-	res.json({
-		hostname: os.hostname(),
-	});
-});
+app.use(express.static('public'));
 
 const port = 8080;
 app.listen(port);
