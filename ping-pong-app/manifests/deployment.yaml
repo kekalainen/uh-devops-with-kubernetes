@@ -14,11 +14,4 @@ spec:
     spec:
       containers:
         - name: ping-pong
-          image: kekalainen/uh-devops-with-kubernetes:1.11-ping-pong
-          volumeMounts:
-            - name: data-volume
-              mountPath: /usr/src/app/data
-      volumes:
-        - name: data-volume
-          persistentVolumeClaim:
-            claimName: hashgenerator-persistent-volume-claim
+          image: kekalainen/uh-devops-with-kubernetes:2.01-ping-pong

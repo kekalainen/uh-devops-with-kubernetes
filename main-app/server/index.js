@@ -2,7 +2,7 @@ const fs = require('fs');
 const http = require('http');
 
 http
-	.createServer((req, res) => {
+	.createServer(async (req, res) => {
 		try {
 			const data = fs.readFileSync('data/status.txt', 'utf8');
 			if (data) res.write(data);
@@ -12,8 +12,21 @@ http
 
 		let pongs = '0';
 		try {
-			const data = fs.readFileSync('data/pong-count.txt', 'utf8');
-			if (data) pongs = data;
+			await new Promise((resolve, reject) => {
+				http.get('http://ping-pong-service:8080/count', (res) => {
+					data = '';
+					res.on('data', (chunk) => {
+						data += chunk;
+					});
+					res.on('end', () => {
+						if (data) pongs = data;
+						resolve();
+					});
+					res.on('error', (err) => {
+						reject(err);
+					});
+				});
+			});
 		} catch (err) {
 			console.error(err);
 		}

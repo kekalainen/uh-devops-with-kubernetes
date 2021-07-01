@@ -1,21 +1,16 @@
-const fs = require('fs');
 const http = require('http');
 
 let count = 0;
 
-function writePongCount() {
-	fs.writeFile('data/pong-count.txt', count.toString(), (err) => {
-		if (err) console.error(err);
-	});
-}
-
-writePongCount();
-
 http
 	.createServer((req, res) => {
-		res.write('pong ' + count);
-		res.end();
-		count += 1;
-		writePongCount();
+		if (req.url == '/count') {
+			res.write(count.toString());
+			res.end();
+		} else {
+			res.write('pong ' + count);
+			res.end();
+			count += 1;
+		}
 	})
 	.listen(8080);
