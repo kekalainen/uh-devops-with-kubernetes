@@ -180,3 +180,21 @@ kekalainen@Z97:~$ curl localhost:8081
 kekalainen@Z97:~$ curl localhost:8081/pingpong
 pong 0
 ```
+
+# 1.10
+
+```sh
+kekalainen@Z97:~$ kubectl delete -f ./project-app/manifests/ingress.yaml
+ingress.networking.k8s.io "web-server-ingress" deleted
+```
+
+```sh
+kekalainen@Z97:~$ kubectl apply -f ./main-app/manifests/deployment.yaml -f ./main-app/manifests/ingress.yaml
+deployment.apps/hashgenerator-deployment configured
+ingress.networking.k8s.io/hashgenerator-ingress created
+```
+
+```sh
+kekalainen@Z97:~$ curl localhost:8081
+2021-07-01T04:19:45.891Z: trycvhj0bd
+```

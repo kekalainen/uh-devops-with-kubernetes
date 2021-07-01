@@ -13,5 +13,16 @@ spec:
         app: hashgenerator
     spec:
       containers:
-        - name: hashgenerator
-          image: kekalainen/uh-devops-with-kubernetes:1.07
+        - name: generator
+          image: kekalainen/uh-devops-with-kubernetes:1.10-generator
+          volumeMounts:
+            - name: data-volume
+              mountPath: /usr/src/app/data
+        - name: server
+          image: kekalainen/uh-devops-with-kubernetes:1.10-server
+          volumeMounts:
+            - name: data-volume
+              mountPath: /usr/src/app/data
+      volumes:
+        - name: data-volume
+          emptyDir: {}
