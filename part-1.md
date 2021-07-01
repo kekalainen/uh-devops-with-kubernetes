@@ -143,3 +143,22 @@ ingress.networking.k8s.io/hashgenerator-ingress created
 kekalainen@Z97:~$ curl localhost:8081
 2021-07-01T02:50:47.581Z: oitzqgo2bif
 ```
+
+# 1.08
+
+```sh
+kekalainen@Z97:~$ kubectl delete -f ./main-app/manifests/ingress.yaml
+ingress.networking.k8s.io "hashgenerator-ingress" deleted
+```
+
+```sh
+kekalainen@Z97:~$ kubectl apply -f ./project-app/manifests/service.yaml
+service/web-server-service configured
+kekalainen@Z97:~$ kubectl apply -f ./project-app/manifests/ingress.yaml 
+ingress.networking.k8s.io/web-server-ingress created
+```
+
+```sh
+kekalainen@Z97:~$ curl localhost:8081
+{"hostname":"web-server-deployment-5d75885bc6-f7nb6"}
+```

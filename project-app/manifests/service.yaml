@@ -3,12 +3,11 @@ kind: Service
 metadata:
   name: web-server-service
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: web-server
   ports:
     - name: http
-      nodePort: 30080
       protocol: TCP
       port: 8080
       targetPort: 8080
