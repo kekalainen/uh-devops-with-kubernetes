@@ -73,3 +73,19 @@ kekalainen@Z97:~$ kubectl logs -f hashgenerator-deployment-6b8f69c7c9-s6ws9
 2021-07-01T00:30:46.636Z: j759sr3twv
 2021-07-01T00:30:51.638Z: j759sr3twv
 ```
+
+# 1.04
+
+```sh
+kekalainen@Z97:~$ kubectl delete deployment web-server
+deployment.apps "web-server" deleted
+```
+
+```sh
+kekalainen@Z97:~$ kubectl apply -f ./project-app/manifests/deployment.yaml 
+deployment.apps/web-server-deployment created
+kekalainen@Z97:~$ kubectl get pods | grep web
+web-server-deployment-5d75885bc6-7dhj7      1/1     Running   0          18s
+kekalainen@Z97:~$ kubectl logs web-server-deployment-5d75885bc6-7dhj7
+Server started on port 8080
+```
