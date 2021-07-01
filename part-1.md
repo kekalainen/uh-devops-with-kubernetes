@@ -46,3 +46,13 @@ kekalainen@Z97:~$ kubectl logs -f hashgenerator-84c9ddb6f7-7hdxf
 2021-06-30T23:49:00.649Z: 3o5pdzix50o
 2021-06-30T23:49:05.650Z: 3o5pdzix50o
 ```
+# 1.02
+
+```sh
+kekalainen@Z97:~$ kubectl create deployment web-server --image=kekalainen/uh-devops-with-kubernetes:1.02
+deployment.apps/web-server created
+kekalainen@Z97:~$ kubectl get pods | grep web
+web-server-5646b87cd5-855k7      0/1     ContainerCreating   0          22s
+kekalainen@Z97:~$ kubectl logs web-server-5646b87cd5-855k7
+Server started on port 8080
+```

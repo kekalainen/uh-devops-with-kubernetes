@@ -1,0 +1,11 @@
+{
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "kekalainen",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
