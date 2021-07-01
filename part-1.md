@@ -105,3 +105,25 @@ Handling connection for 3000
 kekalainen@Z97:~$ curl localhost:3000
 {"hostname":"web-server-deployment-5d75885bc6-7dhj7"}
 ```
+
+# 1.06
+
+```sh
+kekalainen@Z97:~$ k3d cluster delete
+```
+
+```sh
+kekalainen@Z97:~$ k3d cluster create -p "8081:80@loadbalancer" -p "8082:30080@agent[0]" --agents 2
+```
+
+```sh
+kekalainen@Z97:~$ kubectl apply -f ./project-app/manifests/deployment.yaml 
+deployment.apps/web-server-deployment created
+kekalainen@Z97:~$ kubectl apply -f ./project-app/manifests/service.yaml 
+service/web-server-service created
+```
+
+```sh
+kekalainen@Z97:~$ curl localhost:8082
+{"hostname":"web-server-deployment-5d75885bc6-f7nb6"}
+```
