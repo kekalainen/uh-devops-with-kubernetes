@@ -89,3 +89,19 @@ web-server-deployment-5d75885bc6-7dhj7      1/1     Running   0          18s
 kekalainen@Z97:~$ kubectl logs web-server-deployment-5d75885bc6-7dhj7
 Server started on port 8080
 ```
+
+# 1.05
+
+```sh
+kekalainen@Z97:~$ kubectl get pods | grep web
+web-server-deployment-5d75885bc6-7dhj7      1/1     Running   0          18m
+kekalainen@Z97:~$ kubectl port-forward web-server-deployment-5d75885bc6-7dhj7 3000:8080
+Forwarding from 127.0.0.1:3000 -> 8080
+Forwarding from [::1]:3000 -> 8080    
+Handling connection for 3000
+```
+
+```sh
+kekalainen@Z97:~$ curl localhost:3000
+{"hostname":"web-server-deployment-5d75885bc6-7dhj7"}
+```
