@@ -56,3 +56,20 @@ web-server-5646b87cd5-855k7      0/1     ContainerCreating   0          22s
 kekalainen@Z97:~$ kubectl logs web-server-5646b87cd5-855k7
 Server started on port 8080
 ```
+
+# 1.03
+
+```sh
+kekalainen@Z97:~$ kubectl delete deployment hashgenerator
+deployment.apps "hashgenerator" deleted
+```
+
+```sh
+kekalainen@Z97:~$ kubectl apply -f ./main-app/manifests/deployment.yaml 
+deployment.apps/hashgenerator-deployment created
+kekalainen@Z97:~$ kubectl get pods | grep hash
+hashgenerator-deployment-6b8f69c7c9-s6ws9   1/1     Running   0          57s
+kekalainen@Z97:~$ kubectl logs -f hashgenerator-deployment-6b8f69c7c9-s6ws9
+2021-07-01T00:30:46.636Z: j759sr3twv
+2021-07-01T00:30:51.638Z: j759sr3twv
+```

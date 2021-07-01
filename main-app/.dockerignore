@@ -1,4 +1,6 @@
 .dockerignore
 Dockerfile
 
+manifests
+
 node_modules
