@@ -12,7 +12,14 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: web-server-service
+            name: frontend-service
+            port:
+              name: http
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: backend-service
             port:
               name: http
       - path: /pingpong

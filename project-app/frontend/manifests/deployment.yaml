@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: web-server-deployment
+  name: frontend-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: web-server
+      app: frontend
   template:
     metadata:
       labels:
-        app: web-server
+        app: frontend
     spec:
       containers:
-        - name: web-server
-          image: kekalainen/uh-devops-with-kubernetes:1.13
+        - name: frontend
+          image: kekalainen/uh-devops-with-kubernetes:2.02-frontend
           volumeMounts:
           - name: data-volume
             mountPath: /usr/src/app/data

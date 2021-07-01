@@ -22,8 +22,8 @@
     <img src="img/image-of-the-day.jpg" alt="Image of the day">
     <h1>To-do list</h1>
     <div id="todo-app">
-        <form>
-            <input type="text" maxlength="140" placeholder="Enter a task here">
+        <form @submit.prevent="create">
+            <input type="text" maxlength="140" placeholder="Enter a task here" v-model="form.content">
             <input type="submit" value="Save">
         </form>
         <ul>
@@ -31,6 +31,8 @@
         </ul>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>axios.defaults.baseURL = '/api'; Vue.prototype.$http = axios;</script>
     <script src="js/todo-app.js"></script>
 </body>
 </html>
