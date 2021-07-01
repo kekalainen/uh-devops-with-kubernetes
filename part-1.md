@@ -127,3 +127,19 @@ service/web-server-service created
 kekalainen@Z97:~$ curl localhost:8082
 {"hostname":"web-server-deployment-5d75885bc6-f7nb6"}
 ```
+
+# 1.07
+
+```sh
+kekalainen@Z97:~$ kubectl apply -f ./main-app/manifests/deployment.yaml 
+deployment.apps/hashgenerator-deployment created
+kekalainen@Z97:~$ kubectl apply -f ./main-app/manifests/service.yaml 
+service/hashgenerator-service created
+kekalainen@Z97:~$ kubectl apply -f ./main-app/manifests/ingress.yaml 
+ingress.networking.k8s.io/hashgenerator-ingress created
+```
+
+```sh
+kekalainen@Z97:~$ curl localhost:8081
+2021-07-01T02:50:47.581Z: oitzqgo2bif
+```
