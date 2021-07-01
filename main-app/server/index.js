@@ -9,6 +9,16 @@ http
 		} catch (err) {
 			console.error(err);
 		}
+
+		let pongs = '0';
+		try {
+			const data = fs.readFileSync('data/pong-count.txt', 'utf8');
+			if (data) pongs = data;
+		} catch (err) {
+			console.error(err);
+		}
+		res.write('\nPing / Pongs: ' + pongs);
+
 		res.end();
 	})
 	.listen(8080);

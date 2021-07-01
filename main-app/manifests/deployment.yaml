@@ -19,10 +19,11 @@ spec:
             - name: data-volume
               mountPath: /usr/src/app/data
         - name: server
-          image: kekalainen/uh-devops-with-kubernetes:1.10-server
+          image: kekalainen/uh-devops-with-kubernetes:1.11-server
           volumeMounts:
             - name: data-volume
               mountPath: /usr/src/app/data
       volumes:
         - name: data-volume
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: hashgenerator-persistent-volume-claim

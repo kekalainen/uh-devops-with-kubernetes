@@ -198,3 +198,30 @@ ingress.networking.k8s.io/hashgenerator-ingress created
 kekalainen@Z97:~$ curl localhost:8081
 2021-07-01T04:19:45.891Z: trycvhj0bd
 ```
+
+# 1.11
+
+```sh
+kekalainen@Z97:~$ kubectl delete -f ./main-app/manifests/ingress.yaml 
+ingress.networking.k8s.io "hashgenerator-ingress" deleted
+```
+
+```sh
+kekalainen@Z97:~$ docker exec k3d-k3s-default-agent-0 mkdir -p /tmp/kube
+kekalainen@Z97:~$ docker exec k3d-k3s-default-agent-0 chmod 777 /tmp/kube
+```
+
+```sh
+kekalainen@Z97:~$ kubectl apply -f ./manifests/ingress.yaml -f ./manifests/persistent-volume.yaml -f ./main-app/manifests/persistent-volume-claim.yaml -f ./main-app/manifests/deployment.yaml -f ./ping-pong-app/manifests/deployment.yaml 
+ingress.networking.k8s.io/ingress created
+persistentvolume/main-persistent-volume created
+persistentvolumeclaim/hashgenerator-persistent-volume-claim created
+deployment.apps/hashgenerator-deployment configured
+deployment.apps/ping-pong-deployment configured
+```
+
+```sh
+kekalainen@Z97:~$ curl localhost:8081/main
+2021-07-01T05:53:06.549Z: vkvxpnrccq
+Ping / Pongs: 3
+```
