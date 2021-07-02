@@ -64,3 +64,35 @@ kekalainen@Z97:~$ kubectl apply -f ./manifests/ingress.yaml
 ingress.networking.k8s.io/ingress configured
 ingress.networking.k8s.io/ingress created
 ```
+
+# 2.04
+
+```sh
+kekalainen@Z97:~$ kubectl create namespace project
+namespace/project created
+```
+
+```sh
+kekalainen@Z97:~$ kubectl delete deployment backend-deployment frontend-deployment
+deployment.apps "backend-deployment" deleted
+deployment.apps "frontend-deployment" deleted
+kekalainen@Z97:~$ kubectl delete service backend-service frontend-service
+service "backend-service" deleted
+service "frontend-service" deleted
+kekalainen@Z97:~$ kubectl delete ingress ingress
+ingress.networking.k8s.io "ingress" deleted
+```
+
+```sh
+kekalainen@Z97:~$ kubectl apply -f ./project-app/backend/manifests/deployment.yaml -f ./project-app/backend/manifests/service.yaml -f ./project-app/frontend/manifests/deployment.yaml -f ./project-app/frontend/manifests/service.yaml 
+deployment.apps/backend-deployment created
+service/backend-service created
+deployment.apps/frontend-deployment created
+service/frontend-service created
+```
+
+```sh
+kekalainen@Z97:~$ kubectl apply -f ./manifests/ingress.yaml 
+ingress.networking.k8s.io/ingress created
+ingress.networking.k8s.io/ingress unchanged
+```
