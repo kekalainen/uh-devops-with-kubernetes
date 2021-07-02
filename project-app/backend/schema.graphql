@@ -1,9 +1,9 @@
 type Todo {
-    content: String
+    content: String!
 }
 
 type Mutation {
-    createTodo(content: String): Todo
+    createTodo(content: String!): Todo
 }
 
 type Query {

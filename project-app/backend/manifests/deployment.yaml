@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: kekalainen/uh-devops-with-kubernetes:2.08
+          image: kekalainen/uh-devops-with-kubernetes:2.10
           envFrom:
             - secretRef:
                 name: postgres-secret

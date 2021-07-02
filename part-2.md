@@ -208,3 +208,59 @@ deployment.apps/backend-deployment configured
 kekalainen@Z97:~$ kubectl apply -f ./project-app/daily-todo/manifests/cronjob.yaml
 cronjob.batch/daily-todo-cronjob created
 ```
+
+# 2.10
+
+```sh
+kekalainen@Z97:~$ curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+kekalainen@Z97:~$ helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+"prometheus-community" has been added to your repositories
+kekalainen@Z97:~$ helm repo add stable https://charts.helm.sh/stable
+"stable" has been added to your repositories
+```
+
+```sh
+kekalainen@Z97:~$ kubectl create namespace prometheus
+namespace/prometheus created
+kekalainen@Z97:~$ helm install prometheus-community/kube-prometheus-stack --generate-name --namespace prometheus
+```
+
+```sh
+kekalainen@Z97:~$ kubectl get pods -n prometheus | grep grafana
+kube-prometheus-stack-1625247232-grafana-64b7f4ccb-gjnl2          2/2     Running   0          15m
+kekalainen@Z97:~$ kubectl -n prometheus port-forward kube-prometheus-stack-1625247232-grafana-64b7f4ccb-gjnl2 3000
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+Handling connection for 3000
+```
+
+```sh
+kekalainen@Z97:~$ helm repo add loki https://grafana.github.io/loki/charts
+"loki" has been added to your repositories
+kekalainen@Z97:~$ kubectl create namespace loki-stack
+namespace/loki-stack created
+kekalainen@Z97:~$ helm upgrade --install loki --namespace=loki-stack loki/loki-stack
+```
+
+```sh
+kekalainen@Z97:~$ kubectl apply -f ./project-app/backend/manifests/deployment.yaml 
+deployment.apps/backend-deployment configured
+```
+
+```sh
+kekalainen@Z97:~$ curl 'http://localhost:8081/api/' -H 'Content-Type: application/json' --data-raw '{"query":"mutation {createTodo(content: \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet sapien a nunc tincidunt volutpat. Sed feugiat libero non consequat hendrerit. Curabitur euismod odio ex, ac sagittis augue convallis sed.\") {content}}"}' --compressed
+{"errors":[{"message":"value too long for type character varying(140)","locations":[{"line":1,"column":11}],"path":["createTodo"]}],"data":{"createTodo":null}}
+```
+
+Grafana Loki log:
+
+```log
+2021-07-03 01:08:37	2021-07-02T22:08:36.8383001Z stdout F 2021-07-02T22:08:36.838Z: {
+2021-07-03 01:08:37	2021-07-02T22:08:36.8383472Z stdout F   method: 'POST',
+2021-07-03 01:08:37	2021-07-02T22:08:36.8383543Z stdout F   path: '/api/',
+2021-07-03 01:08:37	2021-07-02T22:08:36.8383583Z stdout F   query: {},
+2021-07-03 01:08:37	2021-07-02T22:08:36.8383621Z stdout F   body: {
+2021-07-03 01:08:37	2021-07-02T22:08:36.8383671Z stdout F     query: 'mutation {createTodo(content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet sapien a nunc tincidunt volutpat. Sed feugiat libero non consequat hendrerit. Curabitur euismod odio ex, ac sagittis augue convallis sed.") {content}}'
+2021-07-03 01:08:37	2021-07-02T22:08:36.8383729Z stdout F   }
+2021-07-03 01:08:37	2021-07-02T22:08:36.8383872Z stdout F }
+```
