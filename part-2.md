@@ -122,3 +122,18 @@ kekalainen@Z97:~$ wget https://github.com/bitnami-labs/sealed-secrets/releases/d
 kekalainen@Z97:~$ sudo install -m 755 kubeseal /usr/local/bin/kubeseal
 kekalainen@Z97:~$ rm ./kubeseal
 ```
+
+# 2.06
+
+```sh
+kekalainen@Z97:~$ kubectl apply -f ./main-app/manifests/configmap.yaml -f ./main-app/manifests/deployment.yaml
+configmap/hashgenerator-configmap created
+deployment.apps/hashgenerator-deployment configured
+```
+
+```sh
+kekalainen@Z97:~$ curl localhost:8081/main
+Hello
+2021-07-02T01:11:02.717Z: r8uv8dgnd1o
+Ping / Pongs: 11
+```

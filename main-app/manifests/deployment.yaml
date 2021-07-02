@@ -20,7 +20,10 @@ spec:
             - name: data-volume
               mountPath: /usr/src/app/data
         - name: server
-          image: kekalainen/uh-devops-with-kubernetes:2.01-server
+          image: kekalainen/uh-devops-with-kubernetes:2.06
+          envFrom:
+            - configMapRef:
+                name: hashgenerator-configmap
           volumeMounts:
             - name: data-volume
               mountPath: /usr/src/app/data

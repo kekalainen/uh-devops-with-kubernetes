@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: main
+  name: hashgenerator-configmap
+data:
+  MESSAGE: Hello

@@ -3,6 +3,8 @@ const http = require('http');
 
 http
 	.createServer(async (req, res) => {
+		if (process.env.MESSAGE) res.write(process.env.MESSAGE + '\n');
+
 		try {
 			const data = fs.readFileSync('data/status.txt', 'utf8');
 			if (data) res.write(data);
