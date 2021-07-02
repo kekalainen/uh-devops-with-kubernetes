@@ -1,0 +1,18 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  namespace: project
+  name: daily-todo-cronjob
+spec:
+  schedule: "@daily"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: daily-todo
+            image: kekalainen/uh-devops-with-kubernetes:2.09
+            env:
+              - name: BACKEND_URL
+                value: http://backend-service:8070
+          restartPolicy: OnFailure

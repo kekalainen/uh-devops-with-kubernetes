@@ -201,3 +201,10 @@ statefulset.apps/postgres-statefulset created
 kekalainen@Z97:~$ kubectl apply -f ./project-app/backend/manifests/deployment.yaml
 deployment.apps/backend-deployment configured
 ```
+
+# 2.09
+
+```sh
+kekalainen@Z97:~$ kubectl apply -f ./project-app/daily-todo/manifests/cronjob.yaml
+cronjob.batch/daily-todo-cronjob created
+```
