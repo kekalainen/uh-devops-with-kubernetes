@@ -171,3 +171,33 @@ statefulset.apps/postgres-statefulset created
 kekalainen@Z97:~$ kubectl apply -f ./ping-pong-app/manifests/deployment.yaml 
 deployment.apps/ping-pong-deployment configured
 ```
+
+# 2.08
+
+`~/project-app/backend/manifests/secret.yaml`
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  namespace: project
+  name: postgres-secret
+data:
+  POSTGRES_PASSWORD: <redacted>
+```
+
+```sh
+kekalainen@Z97:~$ kubeseal -o yaml < ./project-app/backend/manifests/secret.yaml > ./project-app/backend/manifests/postgres-sealedsecret.yaml 
+```
+
+```sh
+kekalainen@Z97:~$ kubectl apply -f ./project-app/backend/manifests/postgres-sealedsecret.yaml -f ./project-app/backend/manifests/postgres.yaml
+sealedsecret.bitnami.com/postgres-secret created
+service/postgres-service created
+statefulset.apps/postgres-statefulset created
+```
+
+```sh
+kekalainen@Z97:~$ kubectl apply -f ./project-app/backend/manifests/deployment.yaml
+deployment.apps/backend-deployment configured
+```
