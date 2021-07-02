@@ -4,5 +4,9 @@
   "scripts": {
     "start": "node index.js"
   },
-  "author": "kekalainen"
+  "author": "kekalainen",
+  "dependencies": {
+    "pg": "^8.6.0",
+    "sequelize": "^6.6.4"
+  }
 }

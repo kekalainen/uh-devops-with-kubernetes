@@ -137,3 +137,37 @@ Hello
 2021-07-02T01:11:02.717Z: r8uv8dgnd1o
 Ping / Pongs: 11
 ```
+
+# 2.07
+
+`~/ping-pong-app/manifests/secret.yaml`
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  namespace: main
+  name: postgres-secret
+data:
+  POSTGRES_PASSWORD: <redacted>
+```
+
+```sh
+kekalainen@Z97:~$ kubeseal -o yaml < ./ping-pong-app/manifests/secret.yaml > ./ping-pong-app/manifests/sealedsecret.yaml
+```
+
+```sh
+kekalainen@Z97:~$ kubectl apply -f ./ping-pong-app/manifests/sealedsecret.yaml 
+sealedsecret.bitnami.com/postgres-secret created
+```
+
+```sh
+kekalainen@Z97:~$ kubectl apply -f ./ping-pong-app/manifests/database.yaml 
+service/postgres-service created
+statefulset.apps/postgres-statefulset created
+```
+
+```sh
+kekalainen@Z97:~$ kubectl apply -f ./ping-pong-app/manifests/deployment.yaml 
+deployment.apps/ping-pong-deployment configured
+```

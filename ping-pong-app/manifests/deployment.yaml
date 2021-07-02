@@ -15,4 +15,7 @@ spec:
     spec:
       containers:
         - name: ping-pong
-          image: kekalainen/uh-devops-with-kubernetes:2.01-ping-pong
+          image: kekalainen/uh-devops-with-kubernetes:2.07
+          envFrom:
+            - secretRef:
+                name: postgres-secret
