@@ -96,3 +96,29 @@ kekalainen@Z97:~$ kubectl apply -f ./manifests/ingress.yaml
 ingress.networking.k8s.io/ingress created
 ingress.networking.k8s.io/ingress unchanged
 ```
+
+# 2.05
+
+```sh
+kekalainen@Z97:~$ kubectl apply -f https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.16.0/controller.yamler.yaml
+Warning: rbac.authorization.k8s.io/v1beta1 Role is deprecated in v1.17+, unavailable in v1.22+; use rbac.authorization.k8s.io/v1 Role
+role.rbac.authorization.k8s.io/sealed-secrets-service-proxier created
+role.rbac.authorization.k8s.io/sealed-secrets-key-admin created
+service/sealed-secrets-controller created
+Warning: rbac.authorization.k8s.io/v1beta1 RoleBinding is deprecated in v1.17+, unavailable in v1.22+; use rbac.authorization.k8s.io/v1 RoleBinding
+rolebinding.rbac.authorization.k8s.io/sealed-secrets-service-proxier created
+customresourcedefinition.apiextensions.k8s.io/sealedsecrets.bitnami.com created
+rolebinding.rbac.authorization.k8s.io/sealed-secrets-controller created
+Warning: rbac.authorization.k8s.io/v1beta1 ClusterRoleBinding is deprecated in v1.17+, unavailable in v1.22+; use rbac.authorization.k8s.io/v1 ClusterRoleBinding
+clusterrolebinding.rbac.authorization.k8s.io/sealed-secrets-controller created
+Warning: rbac.authorization.k8s.io/v1beta1 ClusterRole is deprecated in v1.17+, unavailable in v1.22+; use rbac.authorization.k8s.io/v1 ClusterRole
+clusterrole.rbac.authorization.k8s.io/secrets-unsealer created
+serviceaccount/sealed-secrets-controller created
+deployment.apps/sealed-secrets-controller created
+```
+
+```sh
+kekalainen@Z97:~$ wget https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.16.0/kubeseal-linux-amd64 -O kubeseal
+kekalainen@Z97:~$ sudo install -m 755 kubeseal /usr/local/bin/kubeseal
+kekalainen@Z97:~$ rm ./kubeseal
+```
