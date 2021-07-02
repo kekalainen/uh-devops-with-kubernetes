@@ -1,6 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
+  namespace: main
   name: hashgenerator-persistent-volume-claim
 spec:
   storageClassName: manual

@@ -22,6 +22,18 @@ spec:
             name: backend-service
             port:
               name: http
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: main
+  name: ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - http:
+      paths:
       - path: /pingpong
         pathType: Prefix
         backend:
