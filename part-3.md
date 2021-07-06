@@ -102,3 +102,23 @@ Compute Engine default service account  xxxxxxxxxxxx-compute@developer.gservicea
 kekalainen@Z97:~$ gcloud iam service-accounts keys create sa-private-key.json --iam-account xxxxxxxxxxxx-compute@developer.gserviceaccount.com
 created key [xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx] of type [json] as [sa-private-key.json] for [xxxxxxxxxxxx-compute@developer.gserviceaccount.com]
 ```
+
+# 3.04
+
+See commits and branches.
+
+`~/project-app/backend/manifests/secret.yaml`
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  namespace: project
+  name: postgres-secret
+data:
+  POSTGRES_PASSWORD: <redacted>
+```
+
+```sh
+kekalainen@Z97:~$ kubeseal --scope cluster-wide -o yaml < ./project-app/backend/manifests/secret.yaml > ./project-app/backend/manifests/postgres-sealedsecret.yaml 
+```
