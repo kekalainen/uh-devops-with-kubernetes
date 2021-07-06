@@ -1,4 +1,4 @@
-apiVersion: batch/v1
+apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   namespace: project
@@ -11,7 +11,7 @@ spec:
         spec:
           containers:
           - name: daily-todo
-            image: kekalainen/uh-devops-with-kubernetes:2.09
+            image: DAILY_TODO_IMAGE
             env:
               - name: BACKEND_URL
                 value: http://backend-service:8070

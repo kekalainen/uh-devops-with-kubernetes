@@ -87,3 +87,18 @@ Hello
 Ping / Pongs: 9
 kekalainen@Z97:~$     
 ```
+
+# 3.03
+
+```sh
+kekalainen@Z97:~$ kubectl create namespace project
+namespace/project created
+```
+
+```sh
+kekalainen@Z97:~$ gcloud iam service-accounts list
+DISPLAY NAME                            EMAIL                                               DISABLED
+Compute Engine default service account  xxxxxxxxxxxx-compute@developer.gserviceaccount.com  False
+kekalainen@Z97:~$ gcloud iam service-accounts keys create sa-private-key.json --iam-account xxxxxxxxxxxx-compute@developer.gserviceaccount.com
+created key [xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx] of type [json] as [sa-private-key.json] for [xxxxxxxxxxxx-compute@developer.gserviceaccount.com]
+```

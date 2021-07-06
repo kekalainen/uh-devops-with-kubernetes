@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: kekalainen/uh-devops-with-kubernetes:2.02-frontend
+          image: FRONTEND_IMAGE
           volumeMounts:
           - name: data-volume
             mountPath: /usr/src/app/data

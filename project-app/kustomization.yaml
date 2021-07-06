@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- backend/manifests/deployment.yaml
+- backend/manifests/ingress.yaml
+- backend/manifests/postgres-sealedsecret.yaml
+- backend/manifests/postgres.yaml
+- backend/manifests/service.yaml
+- daily-todo/manifests/cronjob.yaml
+- frontend/manifests/deployment.yaml
+- frontend/manifests/service.yaml
+
+images:
+- name: BACKEND_IMAGE
+  newName: kekalainen/uh-devops-with-kubernetes:2.10
+- name: DAILY_TODO_IMAGE
+  newName: kekalainen/uh-devops-with-kubernetes:2.09
+- name: FRONTEND_IMAGE
+  newName: kekalainen/uh-devops-with-kubernetes:2.02-frontend

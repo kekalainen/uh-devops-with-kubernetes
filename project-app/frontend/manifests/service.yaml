@@ -4,7 +4,7 @@ metadata:
   namespace: project
   name: frontend-service
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: frontend
   ports:

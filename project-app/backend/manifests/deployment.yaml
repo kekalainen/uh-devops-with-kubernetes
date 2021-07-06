@@ -15,7 +15,13 @@ spec:
     spec:
       containers:
         - name: backend
-          image: kekalainen/uh-devops-with-kubernetes:2.10
+          image: BACKEND_IMAGE
+          ports:
+            - containerPort: 8070
           envFrom:
             - secretRef:
                 name: postgres-secret
+          readinessProbe:
+            httpGet:
+              path: /?query=query{todos{content}}
+              port: 8070

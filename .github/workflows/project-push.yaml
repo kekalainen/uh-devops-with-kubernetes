@@ -1,0 +1,64 @@
+name: Build and deploy to GKE
+
+on:
+  push:
+      paths:
+        - "project-app/**"
+
+env:
+  GKE_CLUSTER: dwk-cluster
+  GKE_ZONE: europe-north1-a
+
+jobs:
+  setup-build-push-deploy:
+    name: Setup, build, push and deploy
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: project-app
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Configure Google Cloud SDK
+      uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      with:
+        service_account_key: ${{ secrets.GKE_SA_KEY }}
+        project_id: ${{ secrets.GKE_PROJECT }}
+
+    - name: Register Docker credential helper
+      run: gcloud --quiet auth configure-docker
+
+    - name: Update kubeconfig with cluster credentials
+      run: gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE"
+
+    - name: Define image tags
+      run: |
+        echo "backend_image_tag=gcr.io/${{ secrets.GKE_PROJECT }}/backend:${GITHUB_REF#refs/heads/}-$GITHUB_SHA" >> $GITHUB_ENV
+        echo "daily_todo_image_tag=gcr.io/${{ secrets.GKE_PROJECT }}/daily-todo:${GITHUB_REF#refs/heads/}-$GITHUB_SHA" >> $GITHUB_ENV
+        echo "frontend_image_tag=gcr.io/${{ secrets.GKE_PROJECT }}/frontend:${GITHUB_REF#refs/heads/}-$GITHUB_SHA" >> $GITHUB_ENV
+
+    - name: Build images
+      run: |
+        docker build --tag "${{ env.backend_image_tag }}" ./backend
+        docker build --tag "${{ env.daily_todo_image_tag }}" ./daily-todo
+        docker build --tag "${{ env.frontend_image_tag }}" ./frontend
+
+    - name: Push images
+      run: |
+        docker push "${{ env.backend_image_tag }}"
+        docker push "${{ env.daily_todo_image_tag }}"
+        docker push "${{ env.frontend_image_tag }}"
+
+    - name: Set up Kustomize
+      run: |
+        curl -sfL https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.2.0/kustomize_v4.2.0_linux_amd64.tar.gz | tar xz
+        chmod u+x ./kustomize
+
+    - name: Deploy
+      run: |
+        ./kustomize edit set image BACKEND_IMAGE=${{ env.backend_image_tag }}
+        ./kustomize edit set image DAILY_TODO_IMAGE=${{ env.daily_todo_image_tag }}
+        ./kustomize edit set image FRONTEND_IMAGE=${{ env.frontend_image_tag }}
+        kubectl apply -k .
