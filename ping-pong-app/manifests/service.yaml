@@ -4,11 +4,11 @@ metadata:
   namespace: main
   name: ping-pong-service
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   selector:
     app: ping-pong
   ports:
     - name: http
       protocol: TCP
-      port: 8080
+      port: 80
       targetPort: 8080
