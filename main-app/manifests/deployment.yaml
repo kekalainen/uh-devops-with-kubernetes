@@ -13,6 +13,8 @@ spec:
       labels:
         app: hashgenerator
     spec:
+      securityContext:
+        fsGroup: 1000
       containers:
         - name: generator
           image: kekalainen/uh-devops-with-kubernetes:1.10-generator

@@ -58,3 +58,32 @@ postgres-service    ClusterIP      None            <none>        5432/TCP       
 kekalainen@Z97:~$ curl 34.88.x.x
 pong 0
 ```
+
+# 3.02
+
+```sh
+kekalainen@Z97:~$ kubectl apply -f ./main-app/manifests/ -f ./ping-pong-app/manifests/ -f ./manifests/ingress.yaml
+configmap/hashgenerator-configmap created
+deployment.apps/hashgenerator-deployment created
+persistentvolumeclaim/hashgenerator-persistent-volume-claim created
+service/hashgenerator-service created
+service/postgres-service unchanged
+statefulset.apps/postgres-statefulset configured
+deployment.apps/ping-pong-deployment unchanged
+sealedsecret.bitnami.com/postgres-secret unchanged
+service/ping-pong-service configured
+ingress.networking.k8s.io/ingress created
+```
+
+```sh
+kekalainen@Z97:~$ kubectl get ingress -n main
+NAME      CLASS    HOSTS   ADDRESS          PORTS   AGE
+ingress   <none>   *       34.149.x.x       80      18m
+kekalainen@Z97:~$ curl 34.149.x.x/pingpong
+pong 8
+kekalainen@Z97:~$ curl 34.149.x.x/main
+Hello
+2021-07-06T05:10:20.028Z: fb7w019x6fu
+Ping / Pongs: 9
+kekalainen@Z97:~$     
+```
