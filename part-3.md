@@ -126,3 +126,7 @@ kekalainen@Z97:~$ kubeseal --scope cluster-wide -o yaml < ./project-app/backend/
 # 3.05
 
 See commits and workflow runs.
+
+# 3.06
+
+See [`README.md`](./README.md).
