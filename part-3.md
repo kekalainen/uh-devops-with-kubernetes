@@ -130,3 +130,7 @@ See commits and workflow runs.
 # 3.06
 
 See [`README.md`](./README.md).
+
+# 3.07
+
+See [`README.md`](./README.md).
