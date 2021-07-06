@@ -122,3 +122,7 @@ data:
 ```sh
 kekalainen@Z97:~$ kubeseal --scope cluster-wide -o yaml < ./project-app/backend/manifests/secret.yaml > ./project-app/backend/manifests/postgres-sealedsecret.yaml 
 ```
+
+# 3.05
+
+See commits and workflow runs.
