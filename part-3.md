@@ -166,3 +166,7 @@ Transfer rate:          169.52 [Kbytes/sec] received
 ...
 ```
 The test above peaked at approximately 70 millicpu and 30 mebibytes (frontend deployment).
+
+# 3.09
+
+See commits.

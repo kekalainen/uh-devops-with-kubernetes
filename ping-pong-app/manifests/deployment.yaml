@@ -16,6 +16,13 @@ spec:
       containers:
         - name: ping-pong
           image: kekalainen/uh-devops-with-kubernetes:2.07
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "40Mi"
+            limits:
+              cpu: "175m"
+              memory: "80Mi"
           envFrom:
             - secretRef:
                 name: postgres-secret

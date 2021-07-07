@@ -18,11 +18,25 @@ spec:
       containers:
         - name: generator
           image: kekalainen/uh-devops-with-kubernetes:1.10-generator
+          resources:
+            requests:
+              cpu: "1m"
+              memory: "20Mi"
+            limits:
+              cpu: "10m"
+              memory: "40Mi"
           volumeMounts:
             - name: data-volume
               mountPath: /usr/src/app/data
         - name: server
           image: kekalainen/uh-devops-with-kubernetes:2.06
+          resources:
+            requests:
+              cpu: "75m"
+              memory: "40Mi"
+            limits:
+              cpu: "325m"
+              memory: "80Mi"
           envFrom:
             - configMapRef:
                 name: hashgenerator-configmap
