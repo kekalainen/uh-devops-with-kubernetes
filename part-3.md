@@ -134,3 +134,35 @@ See [`README.md`](./README.md).
 # 3.07
 
 See [`README.md`](./README.md).
+
+# 3.08
+
+```sh
+root@18560eedb645:/# ab -n 10000 -c 100 http://34.149.xxx.xxx/
+This is ApacheBench, Version 2.3 <$Revision: 1843412 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking 34.149.xxx.xxx (be patient)
+Completed 1000 requests
+...
+Finished 10000 requests
+
+...
+
+Concurrency Level:      100
+Time taken for tests:   83.813 seconds
+Complete requests:      10000
+Failed requests:        1
+   (Connect: 0, Receive: 0, Length: 1, Exceptions: 0)
+Non-2xx responses:      1
+Total transferred:      14549033 bytes
+HTML transferred:       11679164 bytes
+Requests per second:    119.31 [#/sec] (mean)
+Time per request:       838.130 [ms] (mean)
+Time per request:       8.381 [ms] (mean, across all concurrent requests)
+Transfer rate:          169.52 [Kbytes/sec] received
+
+...
+```
+The test above peaked at approximately 70 millicpu and 30 mebibytes (frontend deployment).

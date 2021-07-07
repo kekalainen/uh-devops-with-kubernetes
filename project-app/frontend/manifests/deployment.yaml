@@ -19,6 +19,13 @@ spec:
           volumeMounts:
           - name: data-volume
             mountPath: /usr/src/app/data
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "40Mi"
+            limits:
+              cpu: "125m"
+              memory: "50Mi"
       volumes:
         - name: data-volume
           emptyDir: {}
