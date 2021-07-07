@@ -29,7 +29,9 @@ spec:
             - name: data-volume
               mountPath: /usr/src/app/data
         - name: server
-          image: kekalainen/uh-devops-with-kubernetes:2.06
+          image: kekalainen/uh-devops-with-kubernetes:4.01-server
+          ports:
+            - containerPort: 8080
           resources:
             requests:
               cpu: "75m"
@@ -37,6 +39,12 @@ spec:
             limits:
               cpu: "325m"
               memory: "80Mi"
+          readinessProbe:
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            httpGet:
+               path: /healthz
+               port: 8080
           envFrom:
             - configMapRef:
                 name: hashgenerator-configmap

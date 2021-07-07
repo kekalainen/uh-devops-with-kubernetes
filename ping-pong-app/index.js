@@ -13,6 +13,16 @@ const { Sequelize, DataTypes } = require('sequelize');
 		}
 	);
 
+	console.log('Waiting for a database connection');
+	while(true) {
+		try {
+			await sequelize.authenticate();
+			break;
+		} catch (err) {
+			await new Promise((resolve) => setTimeout(resolve, 1000));
+		}
+	}
+
 	const Pong = sequelize.define('Pong', {
 		count: {
 			type: DataTypes.INTEGER,
@@ -27,7 +37,9 @@ const { Sequelize, DataTypes } = require('sequelize');
 
 	http
 		.createServer((req, res) => {
-			if (req.url == '/count') {
+			if (req.url == '/healthz') {
+				res.end();
+			} else if (req.url == '/count') {
 				res.write(pong.count.toString());
 				res.end();
 			} else {
@@ -36,5 +48,5 @@ const { Sequelize, DataTypes } = require('sequelize');
 				pong.increment({ count: 1 });
 			}
 		})
-		.listen(8080);
+		.listen(8080, () => console.log('Server listening on port', 8080));
 })();

@@ -15,7 +15,9 @@ spec:
     spec:
       containers:
         - name: ping-pong
-          image: kekalainen/uh-devops-with-kubernetes:2.07
+          image: kekalainen/uh-devops-with-kubernetes:4.01-ping-pong
+          ports:
+            - containerPort: 8080
           resources:
             requests:
               cpu: "50m"
@@ -23,6 +25,12 @@ spec:
             limits:
               cpu: "175m"
               memory: "80Mi"
+          readinessProbe:
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            httpGet:
+               path: /healthz
+               port: 8080
           envFrom:
             - secretRef:
                 name: postgres-secret
