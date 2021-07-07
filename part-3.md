@@ -170,3 +170,7 @@ The test above peaked at approximately 70 millicpu and 30 mebibytes (frontend de
 # 3.09
 
 See commits.
+
+# 3.10
+
+![GCP project backend logs](./img/gcp_project_backend_logs.png)
