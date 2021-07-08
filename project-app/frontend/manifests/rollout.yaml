@@ -1,13 +1,20 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
 metadata:
   namespace: project
-  name: frontend-deployment
+  name: frontend-rollout
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: frontend
+  strategy:
+    canary:
+      steps:
+      - setWeight: 50
+      - analysis:
+          templates:
+          - templateName: cpu-usage
   template:
     metadata:
       labels:
