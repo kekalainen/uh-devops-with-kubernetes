@@ -14,8 +14,8 @@ resources:
 
 images:
 - name: BACKEND_IMAGE
-  newName: kekalainen/uh-devops-with-kubernetes:4.02
+  newName: kekalainen/uh-devops-with-kubernetes:4.05-backend
 - name: DAILY_TODO_IMAGE
   newName: kekalainen/uh-devops-with-kubernetes:2.09
 - name: FRONTEND_IMAGE
-  newName: kekalainen/uh-devops-with-kubernetes:2.02-frontend
+  newName: kekalainen/uh-devops-with-kubernetes:4.05-frontend

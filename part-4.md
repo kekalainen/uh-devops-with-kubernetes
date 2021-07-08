@@ -241,3 +241,7 @@ backend-rollout-7b4479684-mszhf     1/1     Running       0          2m55s
 frontend-rollout-7fc65cb7fb-82rf5   1/1     Running       0          2m55s
 frontend-rollout-6f488cc88d-szhmp   1/1     Terminating   0          103s
 ```
+
+## 4.05
+
+See commits.

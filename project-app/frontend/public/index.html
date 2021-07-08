@@ -15,6 +15,19 @@
         img {
             max-width: 100%;
         }
+
+        .todo-list li span {
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        .todo-list li span input {
+            margin-left: 0.5rem;
+        }
+
+        .strikethrough {
+            text-decoration: line-through;
+        }
     </style>
 </head>
 <body>
@@ -26,8 +39,13 @@
             <input type="text" maxlength="140" placeholder="Enter a task here" v-model="form.content">
             <input type="submit" value="Save">
         </form>
-        <ul>
-            <li v-for="todo in todos">{{ todo }}</li>
+        <ul class="todo-list">
+            <li v-for="todo in todos">
+                <span>
+                    <span :class="{'strikethrough': todo.done}">{{ todo.content }}</span>
+                    <input type="checkbox" v-model="todo.done" :disabled="todo.done" @change="update(todo)">
+                </span>
+            </li>
         </ul>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>

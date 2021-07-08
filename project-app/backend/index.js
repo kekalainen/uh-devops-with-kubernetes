@@ -32,6 +32,11 @@ const { Sequelize, DataTypes } = require('sequelize');
 			allowNull: false,
 			defaultValue: '',
 		},
+		done: {
+			type: DataTypes.BOOLEAN,
+			allowNull: false,
+			defaultValue: false,
+		},
 	});
 
 	await sequelize.sync({ alter: true });
@@ -39,6 +44,15 @@ const { Sequelize, DataTypes } = require('sequelize');
 	var root = {
 		createTodo: ({ content }) => {
 			return Todo.create({ content: content });
+		},
+		updateTodo: ({ id, content, done }) => {
+			return Todo.findOne({ where: { id: id } }).then((todo) => {
+				if (todo)
+					return todo.update({
+						content: content,
+						done: done,
+					});
+			});
 		},
 		todos: () => {
 			return Todo.findAll();
@@ -49,12 +63,15 @@ const { Sequelize, DataTypes } = require('sequelize');
 	app.use(express.json());
 	app.use((req, res, next) => {
 		if (req.path != '/healthz')
-			console.log(new Date().toISOString() + ':', JSON.stringify({
-				method: req.method,
-				path: req.path,
-				query: req.query,
-				body: req.body,
-			}));
+			console.log(
+				new Date().toISOString() + ':',
+				JSON.stringify({
+					method: req.method,
+					path: req.path,
+					query: req.query,
+					body: req.body,
+				})
+			);
 		next();
 	});
 	app.get('/healthz', (req, res) => res.sendStatus(200));

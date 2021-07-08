@@ -1,9 +1,12 @@
 type Todo {
+    id: ID!
     content: String!
+    done: Boolean!
 }
 
 type Mutation {
     createTodo(content: String!): Todo
+    updateTodo(id: ID!, content: String!, done: Boolean!): Todo
 }
 
 type Query {

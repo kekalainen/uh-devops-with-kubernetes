@@ -14,14 +14,16 @@ new Vue({
 						query: `
 							query {
 								todos {
-									content
+									id,
+									content,
+									done
 								}
 							}
 						`,
 					},
 				})
 				.then((res) => {
-					this.todos = res.data.data.todos.map((todo) => todo.content);
+					this.todos = res.data.data.todos;
 				});
 		},
 		create() {
@@ -30,7 +32,7 @@ new Vue({
 					query: `
 						mutation {
 							createTodo(content: "${this.form.content}") {
-								content
+								id
 							}
 						}
 					`,
@@ -39,6 +41,21 @@ new Vue({
 					this.get();
 				});
 			this.form.content = '';
+		},
+		update(todo) {
+			this.$http
+				.post('/', {
+					query: `
+						mutation {
+							updateTodo(id: "${todo.id}", content: "${todo.content}", done: ${todo.done}) {
+								done
+							}
+						}
+					`,
+				})
+				.then((res) => {
+					this.get();
+				});
 		},
 	},
 	created: function () {
