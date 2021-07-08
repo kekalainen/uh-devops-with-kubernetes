@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  namespace: project
+  name: broadcaster-rollout
+spec:
+  replicas: 6
+  selector:
+    matchLabels:
+      app: broadcaster
+  strategy:
+    canary:
+      steps:
+      - setWeight: 50
+      - analysis:
+          templates:
+          - templateName: cpu-usage
+  template:
+    metadata:
+      labels:
+        app: broadcaster
+    spec:
+      containers:
+        - name: broadcaster
+          image: BROADCASTER_IMAGE
+          env:
+            - name: NATS_HOST
+              value: nats.nats.svc.cluster.local:4222
+          envFrom:
+            - secretRef:
+                name: broadcaster-secret
+          resources:
+            requests:
+              cpu: "5m"
+              memory: "25Mi"
+            limits:
+              cpu: "50m"
+              memory: "50Mi"

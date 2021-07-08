@@ -245,3 +245,52 @@ frontend-rollout-6f488cc88d-szhmp   1/1     Terminating   0          103s
 ## 4.05
 
 See commits.
+
+## 4.06
+
+```sh
+kekalainen@Z97:~$ helm repo add nats https://nats-io.github.io/k8s/helm/charts/
+"nats" has been added to your repositories
+kekalainen@Z97:~$ helm repo update
+...
+kekalainen@Z97:~$ helm install nats nats/nats -n nats --create-namespace
+...
+```
+
+`~/project-app/broadcaster/manifests/secret.yaml`
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  namespace: project
+  name: broadcaster-secret
+data:
+  WEBHOOK_URL: <redacted>
+```
+
+```sh
+kekalainen@Z97:~$ kubeseal --scope cluster-wide -o yaml < ./project-app/broadcaster/manifests/secret.yaml > ./project-app/broadcaster/manifests/broadcaster-sealedsecret.yaml
+broadcaster/manifests/broadcaster-sealedsecret.yaml 
+```
+
+```sh
+kekalainen@Z97:~$ kubectl apply -k ./project-app/
+service/backend-service unchanged
+service/frontend-service unchanged
+service/postgres-service unchanged
+statefulset.apps/postgres-statefulset configured
+cronjob.batch/daily-todo-cronjob unchanged
+analysistemplate.argoproj.io/cpu-usage unchanged
+rollout.argoproj.io/backend-rollout configured
+rollout.argoproj.io/broadcaster-rollout created
+rollout.argoproj.io/frontend-rollout configured
+sealedsecret.bitnami.com/broadcaster-secret created
+sealedsecret.bitnami.com/postgres-secret unchanged
+servicemonitor.monitoring.coreos.com/nats-servicemonitor created
+ingress.networking.k8s.io/ingress unchanged
+```
+
+![NATS Grafana dashboard](./img/k3d_nats_grafana_dashboard.png)
+
+![Todo broadcaster showcase](./img/k3d_project_todo_broadcaster.gif)

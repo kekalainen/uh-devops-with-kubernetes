@@ -8,13 +8,18 @@ resources:
 - backend/manifests/postgres-sealedsecret.yaml
 - backend/manifests/postgres.yaml
 - backend/manifests/service.yaml
+- broadcaster/manifests/rollout.yaml
+- broadcaster/manifests/broadcaster-sealedsecret.yaml
+- broadcaster/manifests/servicemonitor.yaml
 - daily-todo/manifests/cronjob.yaml
 - frontend/manifests/rollout.yaml
 - frontend/manifests/service.yaml
 
 images:
 - name: BACKEND_IMAGE
-  newName: kekalainen/uh-devops-with-kubernetes:4.05-backend
+  newName: kekalainen/uh-devops-with-kubernetes:4.06-backend
+- name: BROADCASTER_IMAGE
+  newName: kekalainen/uh-devops-with-kubernetes:4.06-broadcaster
 - name: DAILY_TODO_IMAGE
   newName: kekalainen/uh-devops-with-kubernetes:2.09
 - name: FRONTEND_IMAGE

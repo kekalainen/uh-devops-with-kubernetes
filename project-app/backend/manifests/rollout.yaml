@@ -25,6 +25,9 @@ spec:
           image: BACKEND_IMAGE
           ports:
             - containerPort: 8070
+          env:
+            - name: NATS_HOST
+              value: nats.nats.svc.cluster.local:4222
           envFrom:
             - secretRef:
                 name: postgres-secret

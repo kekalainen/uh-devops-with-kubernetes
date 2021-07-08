@@ -3,8 +3,9 @@ const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
 const { buildSchema } = require('graphql');
 const { Sequelize, DataTypes } = require('sequelize');
+const { connect, JSONCodec } = require('nats');
 
-(async function () {
+(async () => {
 	const sequelize = new Sequelize(
 		'postgres',
 		'postgres',
@@ -40,6 +41,26 @@ const { Sequelize, DataTypes } = require('sequelize');
 	});
 
 	await sequelize.sync({ alter: true });
+
+	console.log('Waiting for a NATS connection');
+	const nc = await connect({
+		servers: process.env.NATS_HOST,
+		maxReconnectAttempts: -1,
+	});
+	const jc = JSONCodec();
+
+	const publish = (subject, event, data) => {
+		nc.publish(
+			subject,
+			jc.encode({
+				event: event,
+				data: data,
+			})
+		).catch((err) => console.log(err));
+	};
+
+	Todo.addHook('afterCreate', (todo) => publish('todos', 'create', todo));
+	Todo.addHook('afterUpdate', (todo) => publish('todos', 'update', todo));
 
 	var root = {
 		createTodo: ({ content }) => {
