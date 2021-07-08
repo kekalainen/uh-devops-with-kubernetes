@@ -109,3 +109,22 @@ frontend-deployment-c6444cf86-zqsqr   1/1     Running       0          110s
 backend-deployment-6d4dcfcc66-qf4m8   1/1     Running       0          33s
 backend-deployment-557ddc5bdf-tgl2v   0/1     Terminating   1          110s
 ```
+
+## 4.03
+
+```sh
+kekalainen@Z97:~$ kubectl get pods -n prometheus | grep prometheus-kube
+prometheus-kube-prometheus-stack-1625-prometheus-0                2/2     Running   9          5d7h
+kekalainen@Z97:~$ kubectl port-forward -n prometheus prometheus-kube-prometheus-stack-1625-prometheus-0 9090:9090
+Forwarding from 127.0.0.1:9090 -> 9090
+Forwarding from [::1]:9090 -> 9090
+```
+
+```promql
+scalar(sum(kube_pod_info{namespace="prometheus", created_by_kind="StatefulSet"}))
+```
+
+```sh
+kekalainen@Z97:~$ curl http://localhost:9090/api/v1/query?query=scalar%28sum%28kube_pod_info%7Bnamespace%3D%22prometheus%22%2C+created_by_kind%3D%22StatefulSet%22%7D%29%29
+{"status":"success","data":{"resultType":"scalar","result":[1625708315.557,"2"]}}
+```
