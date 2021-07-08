@@ -22,8 +22,16 @@ spec:
             - secretRef:
                 name: postgres-secret
           readinessProbe:
+            initialDelaySeconds: 10
+            periodSeconds: 10
             httpGet:
-              path: /?query=query{todos{content}}
+              path: /healthz
+              port: 8070
+          livenessProbe:
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            httpGet:
+              path: /healthz
               port: 8070
           resources:
             requests:

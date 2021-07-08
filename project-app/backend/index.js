@@ -1,6 +1,5 @@
 const fs = require('fs');
 const express = require('express');
-const bodyParser = require('body-parser');
 const { graphqlHTTP } = require('express-graphql');
 const { buildSchema } = require('graphql');
 const { Sequelize, DataTypes } = require('sequelize');
@@ -16,6 +15,16 @@ const { Sequelize, DataTypes } = require('sequelize');
 			logging: false,
 		}
 	);
+
+	console.log('Waiting for a database connection');
+	while (true) {
+		try {
+			await sequelize.authenticate();
+			break;
+		} catch (err) {
+			await new Promise((resolve) => setTimeout(resolve, 1000));
+		}
+	}
 
 	const Todo = sequelize.define('Todo', {
 		content: {
@@ -37,16 +46,18 @@ const { Sequelize, DataTypes } = require('sequelize');
 	};
 
 	var app = express();
-	app.use(bodyParser.json());
+	app.use(express.json());
 	app.use((req, res, next) => {
-		console.log(new Date().toISOString() + ':', {
-			method: req.method,
-			path: req.path,
-			query: req.query,
-			body: req.body,
-		});
+		if (req.path != '/healthz')
+			console.log(new Date().toISOString() + ':', JSON.stringify({
+				method: req.method,
+				path: req.path,
+				query: req.query,
+				body: req.body,
+			}));
 		next();
 	});
+	app.get('/healthz', (req, res) => res.sendStatus(200));
 	app.use(
 		graphqlHTTP({
 			schema: buildSchema(fs.readFileSync('schema.graphql', 'utf-8')),

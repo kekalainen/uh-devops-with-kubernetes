@@ -7,14 +7,14 @@ spec:
   rules:
   - http:
       paths:
-      - path: /*
+      - path: /
         pathType: ImplementationSpecific
         backend:
           service:
             name: frontend-service
             port:
               name: http
-      - path: /api/*
+      - path: /api
         pathType: ImplementationSpecific
         backend:
           service:
