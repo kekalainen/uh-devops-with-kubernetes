@@ -294,3 +294,213 @@ ingress.networking.k8s.io/ingress unchanged
 ![NATS Grafana dashboard](./img/k3d_nats_grafana_dashboard.png)
 
 ![Todo broadcaster showcase](./img/k3d_project_todo_broadcaster.gif)
+
+## 4.07
+
+```sh
+kekalainen@Z97:~$ curl -s https://fluxcd.io/install.sh | sudo bash
+[sudo] password for kekalainen: 
+[INFO]  Downloading metadata https://api.github.com/repos/fluxcd/flux2/releases/latest
+[INFO]  Using 0.16.1 as release
+[INFO]  Downloading hash https://github.com/fluxcd/flux2/releases/download/v0.16.1/flux_0.16.1_checksums.txt
+[INFO]  Downloading binary https://github.com/fluxcd/flux2/releases/download/v0.16.1/flux_0.16.1_linux_amd64.tar.gz
+[INFO]  Verifying binary download
+[INFO]  Installing flux to /usr/local/bin/flux
+kekalainen@Z97:~$ flux check --pre
+► checking prerequisites
+✔ kubectl 1.21.2 >=1.18.0-0
+✔ Kubernetes 1.21.1+k3s1 >=1.16.0-0
+✔ prerequisites checks passed
+```
+
+### Creating manifests
+
+The following commands and files were used to create the manifests in the [uh-kube-cluster-dwk](https://github.com/kekalainen/uh-kube-cluster-dwk/tree/4.07) repository.
+
+#### Flux
+
+```sh
+kekalainen@Z97:~$ export GITHUB_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+kekalainen@Z97:~$ flux bootstrap github --owner=kekalainen --repository=uh-kube-cluster-dwk --personal --private=false
+► connecting to github.com
+✔ repository "https://github.com/kekalainen/uh-kube-cluster-dwk" created
+► cloning branch "main" from Git repository "https://github.com/kekalainen/uh-kube-cluster-dwk.git"
+✔ cloned repository
+► generating component manifests
+✔ generated component manifests
+✔ committed sync manifests to "main" ("6598704643cee4f8e61671a13ca943f0b7a8f2dc")       
+► pushing component manifests to "https://github.com/kekalainen/uh-kube-cluster-dwk.git"
+► installing components in "flux-system" namespace
+✔ installed components
+✔ reconciled components
+► determining if source secret "flux-system/flux-system" exists
+► generating source secret
+✔ public key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCv+4KhdVPWD525EHHFllkGoQoaJ6/qVOG9RqnfC5dL6OrheHba3AIOU8L+bu22v5uN+YBpNSSM69zgfYR5m6i0NdPV3YDMMvA+qXHJp5/dw3YRuLpwNfOmhUED7S+LxaY5pL2Nkt4LOlfwR6+p7kpq1d1jckOKOhAv4JVL8ougtYUiCD/Ye8AHvnKkMNeN+t/Jp4UdurlTN/nu1aaKy2LW6Bn81nBVUheJWO5TAawKJnV2xY9F4ZGyCROTZ2++nwbFFKP6vG2xaLoiehyHFD0CdaHclCi3t+BkvkJByXXo3+FrtoAgG3pO7QcY/5udM0xEDP4T6j7Fm7hqaO+iIc3D
+✔ configured deploy key "flux-system-main-flux-system" for "https://github.com/kekalainen/uh-kube-cluster-dwk"
+► applying source secret "flux-system/flux-system"
+✔ reconciled source secret
+► generating sync manifests
+✔ generated sync manifests
+✔ committed sync manifests to "main" ("0a8d49798cee35d630f7aa649764a412b10aad94")
+► pushing sync manifests to "https://github.com/kekalainen/uh-kube-cluster-dwk.git"
+► applying sync manifests
+✔ reconciled sync configuration
+◎ waiting for Kustomization "flux-system/flux-system" to be reconciled
+✔ Kustomization reconciled successfully
+► confirming components are healthy
+✔ source-controller: deployment ready
+✔ kustomize-controller: deployment ready
+✔ helm-controller: deployment ready
+✔ notification-controller: deployment ready
+✔ all components are healthy
+```
+
+#### Monitoring
+
+##### Prometheus & Grafana
+
+```sh
+flux create source git monitoring --interval=1h --url=https://github.com/fluxcd/flux2 --branch=main --export > monitoring.yaml
+flux create kustomization monitoring-stack --interval=1h --prune=true --source=monitoring --path="./manifests/monitoring/kube-prometheus-stack" --health-check="Deployment/kube-prometheus-stack-operator.monitoring" --health-check="Deployment/kube-prometheus-stack-grafana.monitoring" --export >> monitoring.yaml
+flux create kustomization monitoring-config  --interval=1h --prune=true --source=monitoring --path="./manifests/monitoring/monitoring-config" --export >> monitoring.yaml
+```
+
+##### Loki & Promtail
+
+```sh
+flux create source helm grafana --interval=1h --url=https://grafana.github.io/helm-charts --export > loki.yaml
+flux create helmrelease loki --interval=1h --release-name=loki --target-namespace=monitoring --source=HelmRepository/grafana --chart=loki-stack --crds=CreateReplace --export >> loki.yaml
+```
+
+#### Sealed Secrets
+
+```sh
+flux create source helm sealed-secrets --interval=1h --url=https://bitnami-labs.github.io/sealed-secrets --export > sealed-secrets.yaml
+flux create helmrelease sealed-secrets --interval=1h --release-name=sealed-secrets --target-namespace=flux-system --source=HelmRepository/sealed-secrets --chart=sealed-secrets --chart-version=">=1.15.0-0" --crds=CreateReplace --export >> sealed-secrets.yaml
+```
+
+#### NATS
+
+`nats.yaml`
+
+```yaml
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: nats
+  labels:
+    name: nats
+
+
+```
+
+```sh
+flux create source helm nats --interval=1h --url=https://nats-io.github.io/k8s/helm/charts/ --export >> nats.yaml
+flux create helmrelease nats --interval=1h --release-name=nats --target-namespace=nats --source=HelmRepository/nats --chart=nats --crds=CreateReplace --export >> nats.yaml
+```
+
+### Bootstrapping
+
+```sh
+kekalainen@Z97:~$ k3d cluster delete
+...
+INFO[0013] Successfully deleted cluster k3s-default!
+kekalainen@Z97:~$ k3d cluster create -p "8081:80@loadbalancer" -p "8082:30080@agent[0]" --agents 2
+...
+INFO[0027] Cluster 'k3s-default' created successfully!
+...
+```
+
+`~/master.key`
+
+```yaml
+apiVersion: v1
+items:
+- apiVersion: v1
+  data:
+    tls.crt: <redacted>
+    tls.key: <redacted>
+  kind: Secret
+  metadata:
+    creationTimestamp: "2021-07-02T00:37:23Z"
+    generateName: sealed-secrets-key
+    labels:
+      sealedsecrets.bitnami.com/sealed-secrets-key: active
+    name: sealed-secrets-keysdr97
+    namespace: flux-system
+    resourceVersion: "48941"
+    uid: b5093ed2-4aad-44dc-aafe-80e2466d26ee
+  type: kubernetes.io/tls
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""
+```
+
+```sh
+kekalainen@Z97:~$ kubectl create namespace flux-system
+namespace/flux-system created
+kekalainen@Z97:~$ kubectl apply -f ./master.key
+secret/sealed-secrets-keysdr97 created
+```
+
+```sh
+kekalainen@Z97:~$ export GITHUB_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+kekalainen@Z97:~$ flux bootstrap github --owner=kekalainen --repository=uh-kube-cluster-dwk --personal --private=false
+...
+```
+
+### Deploying and testing
+
+```sh
+kekalainen@Z97:~$ kubectl create namespace project
+namespace/project created
+kekalainen@Z97:~$ kubectl apply -k ./project-app/
+service/backend-service created
+service/frontend-service created
+service/postgres-service created
+statefulset.apps/postgres-statefulset created
+cronjob.batch/daily-todo-cronjob created
+analysistemplate.argoproj.io/cpu-usage created
+rollout.argoproj.io/backend-rollout created
+rollout.argoproj.io/broadcaster-rollout created
+rollout.argoproj.io/frontend-rollout created
+sealedsecret.bitnami.com/broadcaster-secret created
+sealedsecret.bitnami.com/postgres-secret created
+servicemonitor.monitoring.coreos.com/nats-servicemonitor created
+ingress.networking.k8s.io/ingress created
+```
+
+```sh
+kekalainen@Z97:~$ curl localhost:8081
+<!DOCTYPE html>
+...
+```
+
+```sh
+kekalainen@Z97:~$ kubectl create namespace main
+namespace/main created
+kekalainen@Z97:~$ kubectl apply -f ./ping-pong-app/manifests/
+service/postgres-service created
+statefulset.apps/postgres-statefulset created
+deployment.apps/ping-pong-deployment created
+sealedsecret.bitnami.com/postgres-secret created
+service/ping-pong-service created
+kekalainen@Z97:~$ kubectl apply -f ./main-app/manifests/
+configmap/hashgenerator-configmap created
+deployment.apps/hashgenerator-deployment created
+persistentvolumeclaim/hashgenerator-persistent-volume-claim created
+service/hashgenerator-service created
+kekalainen@Z97:~$ kubectl apply -f ./manifests/
+ingress.networking.k8s.io/ingress created
+```
+
+```sh
+kekalainen@Z97:~$ curl localhost:8081/pingpong
+pong 0
+kekalainen@Z97:~$ curl localhost:8081/main
+Hello
+2021-07-09T06:56:42.725Z: nb176vrowp
+Ping / Pongs: 1
+```
