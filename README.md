@@ -21,3 +21,4 @@
   Despite the above write-up, I opted for Postgres with a `PersistentVolumeClaim` for this course's project. This choice is mainly due to high availability, scalability and backups not being concerns. An in-cluster database allows for retaining a comparatively simple deployment workflow configuration as separate logic for provisioning databases for different branches isn't required.
 
 * [Part 4](./part-4.md)
+* [Part 5](./part-5.md)

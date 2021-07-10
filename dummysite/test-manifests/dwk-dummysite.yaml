@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dwk
+  labels:
+    name: dwk
+
+---
+apiVersion: kekalainen.me/v1
+kind: DummySite
+metadata:
+  name: dwk
+  namespace: dwk
+spec:
+  website_url: https://devopswithkubernetes.com

@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dummysite-controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dummysite-controller
+  template:
+    metadata:
+      labels:
+        app: dummysite-controller
+    spec:
+      serviceAccountName: dummysite-controller
+      containers:
+        - name: dummysite-controller
+          image: kekalainen/uh-devops-with-kubernetes:5.01-controller
+          resources:
+            requests:
+              cpu: '1m'
+              memory: '50Mi'
+            limits:
+              cpu: '50m'
+              memory: '75Mi'

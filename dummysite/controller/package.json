@@ -1,0 +1,13 @@
+{
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "NODE_ENV=development node index.js"
+  },
+  "author": "kekalainen",
+  "dependencies": {
+    "@kubernetes/client-node": "^0.15.0",
+    "jsonstream": "^1.0.3"
+  }
+}
