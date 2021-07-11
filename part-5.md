@@ -78,3 +78,26 @@ No resources found in default namespace.
 kekalainen@Z97:~$ curl http://localhost:8081/example
 404 page not found
 ```
+
+## 5.02
+
+### Installing Linkerd CLI
+
+```sh
+kekalainen@Z97:~$ curl -sL https://run.linkerd.io/install | sh
+...
+kekalainen@Z97:~$ echo 'export PATH=$PATH:$HOME/.linkerd2/bin' >> ~/.bashrc
+```
+
+### Creating manifests
+
+The following commands were used to create the new manifests in the [uh-kube-cluster-dwk](https://github.com/kekalainen/uh-kube-cluster-dwk/tree/5.02) repository.
+
+```sh
+kekalainen@Z97:~$ linkerd install > linkerd.yaml
+kekalainen@Z97:~$ linkerd install | kubectl apply -f -
+...
+kekalainen@Z97:~$ linkerd viz install > linkerd-viz.yaml
+```
+
+Additionally, the `project` namespace is now explicitly defined with the `linkerd.io/inject` annotation set to `enabled` (see commits).

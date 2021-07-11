@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: project
+  labels:
+    name: project
+  annotations:
+    linkerd.io/inject: enabled
