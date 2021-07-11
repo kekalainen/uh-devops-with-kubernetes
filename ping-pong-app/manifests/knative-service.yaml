@@ -1,0 +1,15 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: ping-pong
+  namespace: main
+spec:
+  template:
+    metadata:
+      name: ping-pong-v1
+    spec:
+      containers:
+        - image: kekalainen/uh-devops-with-kubernetes:4.01-ping-pong
+          envFrom:
+            - secretRef:
+                name: postgres-secret

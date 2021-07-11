@@ -523,3 +523,100 @@ Below is a comparison of Rancher and OpenShift. For the purposes of this exercis
 - Rancher runs on any system that runs Docker. OpenShift runs on Fedora CoreOS or its enterprise variant RHEL CoreOS.
 - OpenShift is backed by IBM-owned Red Hat, while Rancher is backed by SUSE-owned Rancher Labs. While IBM is a larger company, both have reliable revenue streams that allow for sustainable long-term development.
 - Both vendors provide enterprise support offerings. Additionally, both are used by large enterprise customers.
+
+## 5.05
+
+### Setting up a serverless environment
+
+#### Creating a cluster
+
+```sh
+kekalainen@Z97:~$ k3d cluster delete
+...
+kekalainen@Z97:~$ k3d cluster create --port '8082:30080@agent[0]' -p 8081:80@loadbalancer --agents 2 --k3s-server-arg '--no-deploy=traefik'
+...
+```
+
+#### Installing Knative
+
+```sh
+kekalainen@Z97:~$ kubectl apply -f https://github.com/knative/serving/releases/download/v0.18.0/serving-crds.yaml
+...
+kekalainen@Z97:~$ kubectl apply -f https://github.com/knative/serving/releases/download/v0.18.0/serving-core.yaml
+...
+configmap/config-network created
+...
+```
+
+#### Installing Contour
+
+```sh
+kekalainen@Z97:~$ kubectl apply -f https://github.com/knative/net-contour/releases/download/v0.18.0/contour.yaml -f https://github.com/knative/net-contour/releases/download/v0.18.0/net-contour.yaml
+...
+deployment.apps/contour-ingress-controller created
+kekalainen@Z97:~$ kubectl patch configmap/config-network --namespace knative-serving --type merge --patch '{"data":{"ingress.class":"contour.ingress.networking.knative.dev"}}'
+configmap/config-network patched
+```
+
+### Deploying ping-pong-app
+
+#### Database
+
+`~/master.key`
+
+```yaml
+...
+    name: sealed-secrets-keysdr97
+    namespace: kube-system
+...
+```
+
+```sh
+kekalainen@Z97:~$ kubectl apply -f ./master.key
+secret/sealed-secrets-keysdr97 created
+kekalainen@Z97:~$ kubectl apply -f https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.16.0/controller.yaml
+...
+```
+
+```sh
+kekalainen@Z97:~/ping-pong-app/manifests$ kubectl create namespace main
+namespace/main created
+kekalainen@Z97:~/ping-pong-app/manifests$ kubectl apply -f ./database.yaml -f ./sealedsecret.yaml
+service/postgres-service created
+statefulset.apps/postgres-statefulset created
+sealedsecret.bitnami.com/postgres-secret created
+```
+
+#### Knative service
+
+```sh
+kekalainen@Z97:~/ping-pong-app/manifests$ kubectl apply -f ./knative-service.yaml
+service.serving.knative.dev/ping-pong created
+```
+
+### Testing
+
+```sh
+kekalainen@Z97:~$ kubectl -n main get kservice
+NAME        URL                                 LATESTCREATED   LATESTREADY    READY   REASON
+ping-pong   http://ping-pong.main.example.com   ping-pong-v1    ping-pong-v1   True
+kekalainen@Z97:~$ kubectl -n main get pods
+NAME                     READY   STATUS    RESTARTS   AGE
+postgres-statefulset-0   1/1     Running   0          4m43s
+```
+
+```sh
+kekalainen@Z97:~$ curl -H "Host: ping-pong.main.example.com" http://localhost:8081
+pong 0
+kekalainen@Z97:~$ curl -H "Host: ping-pong.main.example.com" http://localhost:8081
+pong 1
+kekalainen@Z97:~$ curl -H "Host: ping-pong.main.example.com" http://localhost:8081
+pong 2
+```
+
+```sh
+kekalainen@Z97:~$ kubectl -n main get pods
+NAME                                      READY   STATUS        RESTARTS   AGE
+postgres-statefulset-0                    1/1     Running       0          5m30s
+ping-pong-v1-deployment-784c78d5c-7lzhc   2/2     Running       0          5s
+```
