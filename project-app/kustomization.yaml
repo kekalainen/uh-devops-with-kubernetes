@@ -18,10 +18,14 @@ resources:
 
 images:
 - name: BACKEND_IMAGE
-  newName: kekalainen/uh-devops-with-kubernetes:4.06-backend
+  newName: ghcr.io/kekalainen/uh-dwk-project-backend
+  newTag: a5ad7a9620f6ffbc624e9e2d3322e5c62088813f
 - name: BROADCASTER_IMAGE
-  newName: kekalainen/uh-devops-with-kubernetes:4.06-broadcaster
+  newName: ghcr.io/kekalainen/uh-dwk-project-broadcaster
+  newTag: a5ad7a9620f6ffbc624e9e2d3322e5c62088813f
 - name: DAILY_TODO_IMAGE
-  newName: kekalainen/uh-devops-with-kubernetes:2.09
+  newName: ghcr.io/kekalainen/uh-dwk-project-daily-todo
+  newTag: a5ad7a9620f6ffbc624e9e2d3322e5c62088813f
 - name: FRONTEND_IMAGE
-  newName: kekalainen/uh-devops-with-kubernetes:4.05-frontend
+  newName: ghcr.io/kekalainen/uh-dwk-project-frontend
+  newTag: a5ad7a9620f6ffbc624e9e2d3322e5c62088813f
