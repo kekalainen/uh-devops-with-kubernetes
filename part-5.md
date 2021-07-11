@@ -510,3 +510,16 @@ clusterrolebinding.rbac.authorization.k8s.io "flagger" deleted
 deployment.apps "flagger" deleted
 namespace "test" deleted
 ```
+
+## 5.04
+
+Below is a comparison of Rancher and OpenShift. For the purposes of this exercise, it's skewed towards Rancher.
+
+- Rancher is fully open source. OpenShift OKD (Origin Community Distribution) is open source, but their PaaS (platform as a service) offering OCP (OpenShift Container Platform), while based on the former, is not open source.
+- Rancher provides multi-cluster management out-of-the-box. OpenShift's alternative is a separately licensed product called Red Hat Advanced Cluster Management for Kubernetes.
+- Rancher can be installed to new and existing clusters. It also provides [documentation](https://rancher.com/docs/rancher/v2.5/en/faq/removing-rancher/) for uninstallation without affecting workloads. OpenShift is tightly coupled with the Kubernetes clusters it provisions. Migration involves provisioning a new cluster and redeploying containers, provided that they're compatible with the new environment.
+- OpenShift is more opinionated and has established various practices specific to its ecosystem and tooling. While this reduces the amount of decisions that have to be made during a deployment, it also reduces flexibility, increases the degree of vendor lock-in and reduces the portability of skills acquired with vanilla Kubernetes.
+- Rancher is more lightweight and tends to closer follow new releases of Kubernetes and other upstream components. The overall lower level of complexity also helps facilitate faster installations and upgrades.
+- Rancher runs on any system that runs Docker. OpenShift runs on Fedora CoreOS or its enterprise variant RHEL CoreOS.
+- OpenShift is backed by IBM-owned Red Hat, while Rancher is backed by SUSE-owned Rancher Labs. While IBM is a larger company, both have reliable revenue streams that allow for sustainable long-term development.
+- Both vendors provide enterprise support offerings. Additionally, both are used by large enterprise customers.
