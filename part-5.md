@@ -620,3 +620,40 @@ NAME                                      READY   STATUS        RESTARTS   AGE
 postgres-statefulset-0                    1/1     Running       0          5m30s
 ping-pong-v1-deployment-784c78d5c-7lzhc   2/2     Running       0          5s
 ```
+
+## 5.06
+
+![CNCF landscape annotated](./img/cncf_landscape_annotated.png)
+
+### Used directly (red)
+
+- **MariaDB**, **MongoDB**, **MySQL** and **Redis** for various (primarily web-based) applications
+- **PostgreSQL** for the database-reliant applications in this course
+- **NATS** for the `project-app` broadcasting functionality
+- **HELM** for installing dependencies during this course
+- **Bitnami** for Sealed Secrets during this course and their container images elsewhere
+- **Argo Rollouts** for canary releases in part 4 of this course
+- **Flagger** for the Automated Canary Releases task from Linkerd
+- **Flux** for the GitOps implementation in part 4 of this course
+- **Github Actions** during this and other courses
+- **Gitlab CI/CD** for various projects
+- **Kubernetes** during this course
+- **Linkerd** used in part 5 of this course
+- **MinIO** as an object storage for a screenshot storage application
+- **Google Container Registry** for the deployment pipeline in part 3 of this course
+- **K3s** used by the k3d wrapper as the primary Kubernetes distribution during this course
+- **Google Kubernetes Engine** during part 3 of this course
+- **Heroku** during other courses
+- **Portainer** for managing various Docker containers on a VPS
+- **Prometheus**, **Grafana** and **Grafana Loki** for monitoring during this course
+- **Sentry** for monitoring a demo instance of a commercial CMS and related applications
+- **Knative** for deploying `ping-pong-app` in the previous exercise
+
+### Used indirectly (orange)
+
+- **CoreDNS** used by kube-dns
+- **etcd** used as a key-value store by the Kubernetes Control Plane
+- **gRPC** used by emojivoto which was used in part 5 of this course
+- **Traefik Kubernetes Ingress provider** is used by K3s
+- **Google Persistent Disk** for volumes provisioned by GKE during part 3 of this course
+- **Eficode** as they had partnered with the University of Helsinki for the [DevOps with Docker](https://devopswithdocker.com) course
